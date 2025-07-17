@@ -23,10 +23,11 @@ public class BookSearchController {
             @RequestParam(required = false) String author_name,
             @RequestParam(required = false) String book_name,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) Integer publishing_year
+            @RequestParam(required = false) Integer publishing_year,
+            @RequestParam(required = false) Boolean available
     ) {
         return ResponseEntity.ok(
-                bookSearchService.searchBooks(author_name, book_name, category, publishing_year)
+                bookSearchService.searchBooks(author_name, book_name, category, publishing_year, available)
         );
     }
 }
