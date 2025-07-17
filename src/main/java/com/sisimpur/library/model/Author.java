@@ -1,12 +1,14 @@
 package com.sisimpur.library.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,26 +18,21 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "books")
+@Table(name = "authors")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
-
+public class Author {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 255)
-    private String title;
+    @Column(name = "name", length = 255, nullable = false)
+    private String name;
 
-    @Column(name = "genre", length = 100)
-    private String genre;
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String biography;
 
-    @Column(name = "published_year")
-    private int publishedYear;
-
-    // Add more fields as needed
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books;
 }
