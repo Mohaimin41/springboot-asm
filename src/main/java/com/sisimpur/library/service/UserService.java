@@ -1,9 +1,11 @@
 package com.sisimpur.library.service;
 
+import com.sisimpur.library.dto.BookSummaryDTO;
 import com.sisimpur.library.dto.UserCreateReqDTO;
 import com.sisimpur.library.dto.UserDTO;
 import com.sisimpur.library.exception.ResourceNotFoundException;
 import com.sisimpur.library.model.User;
+import com.sisimpur.library.repository.BorrowRepository;
 import com.sisimpur.library.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BorrowRepository borrowRepository;
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
@@ -32,6 +35,14 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        boolean hasActiveBorrows = user.getBorrows().stream()
+                .anyMatch(b -> b.getReturnDate() == null);
+
+        if (hasActiveBorrows) {
+            throw new IllegalArgumentException("Cannot delete a user with active borrows.");
+        }
+
         userRepository.delete(user);
     }
 
@@ -55,6 +66,19 @@ public class UserService {
     }
 
     private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail());
+        List<BookSummaryDTO> borrowedBooks = user.getBorrows().stream()
+                .filter(b -> b.getReturnDate() == null)
+                .map(b -> new BookSummaryDTO(
+                        b.getBook().getId(),
+                        b.getBook().getTitle(),
+                        b.getBook().getGenre(),
+                        b.getBook().getPublishedYear()))
+                .toList();
+
+        return new UserDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                borrowedBooks);
     }
 }
