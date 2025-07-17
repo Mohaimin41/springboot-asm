@@ -18,6 +18,7 @@ import com.sisimpur.library.service.BookService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -46,4 +47,17 @@ public class BookController {
         return ResponseEntity.ok(bookDTO);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<BookDTO> updateBook(
+            @PathVariable @Positive(message = "id must be positive integer") Long id,
+            @Valid @RequestBody BookCreateReqDTO request) {
+        BookDTO updatedBook = bookService.updateBook(id, request);
+        return ResponseEntity.ok(updatedBook);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBook(@PathVariable @Positive(message = "id must be positive integer") Long id) {
+        bookService.deleteBookById(id);
+        return ResponseEntity.ok("Book deleted successfully");
+    }
 }
