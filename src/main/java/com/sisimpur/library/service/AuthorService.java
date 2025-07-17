@@ -79,4 +79,12 @@ public class AuthorService {
                 author.getBiography(),
                 books);
     }
+
+    public void deleteAuthor(Long id) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + id));
+
+        authorRepository.delete(author);
+    }
+
 }
