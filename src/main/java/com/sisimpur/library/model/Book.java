@@ -1,5 +1,7 @@
 package com.sisimpur.library.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,5 +44,5 @@ public class Book {
     private Author author;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Borrow borrow;
+    private List<Borrow> borrows;
 }
