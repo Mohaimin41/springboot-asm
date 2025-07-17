@@ -1,0 +1,16 @@
+meta {
+  name: search-by-year-author
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:8080/api/v1/book-search?publishing_year=1998&author_name=row
+  body: none
+  auth: inherit
+}
+
+params:query {
+  publishing_year: 1998
+  author_name: row
+}
