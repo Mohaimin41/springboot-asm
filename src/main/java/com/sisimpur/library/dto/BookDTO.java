@@ -13,4 +13,5 @@ public class BookDTO {
     private String genre;
     private Integer publishedYear;
     private String authorName;
+    private boolean isAvailable;
 }
