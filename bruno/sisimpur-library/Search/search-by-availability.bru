@@ -1,0 +1,16 @@
+meta {
+  name: search-by-availability
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8080/api/v1/book-search?available=false&book_name=sor
+  body: none
+  auth: inherit
+}
+
+params:query {
+  available: false
+  book_name: sor
+}
