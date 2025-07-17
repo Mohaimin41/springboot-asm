@@ -32,7 +32,7 @@ public class BookControllerTest {
 
     @Test
     public void testGetAllBooks() throws Exception {
-        BookDTO book = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien");
+        BookDTO book = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien", false);
         Mockito.when(bookService.getAllBookDTOs()).thenReturn(List.of(book));
 
         mockMvc.perform(get("/api/v1/books"))
@@ -42,7 +42,7 @@ public class BookControllerTest {
 
     @Test
     public void testGetBookById() throws Exception {
-        BookDTO book = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien");
+        BookDTO book = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien", true);
         Mockito.when(bookService.getBookDTO(1L)).thenReturn(book);
 
         mockMvc.perform(get("/api/v1/books/1"))
@@ -53,7 +53,7 @@ public class BookControllerTest {
     @Test
     public void testCreateBook() throws Exception {
         BookCreateReqDTO req = new BookCreateReqDTO("The Hobbit", 1L, "Fantasy", 1937);
-        BookDTO res = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien");
+        BookDTO res = new BookDTO(1L, "The Hobbit", "Fantasy", 1937, "J.R.R. Tolkien", true);
 
         Mockito.when(bookService.createBook(any(BookCreateReqDTO.class))).thenReturn(res);
 
@@ -67,7 +67,7 @@ public class BookControllerTest {
     @Test
     public void testUpdateBook() throws Exception {
         BookCreateReqDTO req = new BookCreateReqDTO("Updated Book", 1L, "Sci-Fi", 2022);
-        BookDTO res = new BookDTO(1L, "Updated Book", "Sci-Fi", 2022, "Author");
+        BookDTO res = new BookDTO(1L, "Updated Book", "Sci-Fi", 2022, "Author", true);
 
         Mockito.when(bookService.updateBook(eq(1L), any(BookCreateReqDTO.class))).thenReturn(res);
 
