@@ -1,6 +1,7 @@
 package com.sisimpur.library.model;
 
-import jakarta.persistence.Column;
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,26 +17,23 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "books")
+@Table(name = "borrow")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
-
+public class Borrow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 255)
-    private String title;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "genre", length = 100)
-    private String genre;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "book_id", unique = true)
+    private Book book;
 
-    @Column(name = "published_year")
-    private int publishedYear;
+    private LocalDate borrowDate;
 
-    // Add more fields as needed
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    private LocalDate returnDate; // nullable: if null, it's still borrowed
 }

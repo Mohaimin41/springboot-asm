@@ -22,6 +22,17 @@ CREATE TABLE books (
     FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE CASCADE
 );
 
+-- Borrow Table
+CREATE TABLE borrow (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL UNIQUE, -- each book can be borrowed only once at a time
+    borrow_date DATE NOT NULL,
+    return_date DATE,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
 
 -- Insert sample users
 INSERT INTO users (name, email) VALUES
