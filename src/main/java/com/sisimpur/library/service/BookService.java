@@ -19,48 +19,79 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookService {
 
-    private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
+        private final BookRepository bookRepository;
+        private final AuthorRepository authorRepository;
 
-    public BookDTO getBookDTO(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        public BookDTO getBookDTO(Long id) {
+                Book book = bookRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
-        return new BookDTO(
-                book.getId(),
-                book.getTitle(),
-                book.getGenre(),
-                book.getPublishedYear(),
-                book.getAuthor().getName());
-    }
+                return new BookDTO(
+                                book.getId(),
+                                book.getTitle(),
+                                book.getGenre(),
+                                book.getPublishedYear(),
+                                book.getAuthor().getName());
+        }
 
-    public List<BookDTO> getAllBookDTOs() {
-        return bookRepository.findAll().stream()
-                .map(book -> new BookDTO(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getGenre(),
-                        book.getPublishedYear(),
-                        book.getAuthor().getName()))
-                .collect(Collectors.toList());
-    }
+        public List<BookDTO> getAllBookDTOs() {
+                return bookRepository.findAll().stream()
+                                .map(book -> new BookDTO(
+                                                book.getId(),
+                                                book.getTitle(),
+                                                book.getGenre(),
+                                                book.getPublishedYear(),
+                                                book.getAuthor().getName()))
+                                .collect(Collectors.toList());
+        }
 
-    public BookDTO createBook(BookCreateReqDTO request) {
-        Author author = authorRepository.findById(request.getAuthor_id())
-                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
+        public BookDTO createBook(BookCreateReqDTO request) {
+                Author author = authorRepository.findById(request.getAuthor_id())
+                                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
 
-        Book book = new Book();
-        book.setTitle(request.getTitle());
-        book.setGenre(request.getGenre());
-        book.setPublishedYear(request.getPublished_year());
-        book.setAuthor(author);
+                Book book = new Book();
+                book.setTitle(request.getTitle());
+                book.setGenre(request.getGenre());
+                book.setPublishedYear(request.getPublished_year());
+                book.setAuthor(author);
 
-        Book savedBook = bookRepository.save(book);
+                Book savedBook = bookRepository.save(book);
 
-        return new BookDTO(
-                savedBook.getId(),
-                savedBook.getTitle(),
-                savedBook.getGenre(),
-                savedBook.getPublishedYear(),
-                savedBook.getAuthor().getName());
-    }
+                return new BookDTO(
+                                savedBook.getId(),
+                                savedBook.getTitle(),
+                                savedBook.getGenre(),
+                                savedBook.getPublishedYear(),
+                                savedBook.getAuthor().getName());
+        }
+
+        public void deleteBookById(Long id) {
+                Book book = bookRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+                bookRepository.delete(book);
+        }
+
+        public BookDTO updateBook(Long id, BookCreateReqDTO request) {
+                Book book = bookRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+
+                Author author = authorRepository.findById(request.getAuthor_id())
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Author not found with id: " + request.getAuthor_id()));
+
+                book.setTitle(request.getTitle());
+                book.setGenre(request.getGenre());
+                book.setPublishedYear(request.getPublished_year());
+                book.setAuthor(author);
+
+                Book updatedBook = bookRepository.save(book);
+
+                return new BookDTO(
+                                updatedBook.getId(),
+                                updatedBook.getTitle(),
+                                updatedBook.getGenre(),
+                                updatedBook.getPublishedYear(),
+                                updatedBook.getAuthor().getName());
+        }
+
 }
