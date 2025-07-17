@@ -23,12 +23,18 @@ public class BookController {
     @GetMapping
     public ResponseEntity<List<BookDTO>> getAllBooks() {
         List<BookDTO> allBookDTOs = bookService.getAllBookDTOs();
+        if (allBookDTOs == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(allBookDTOs);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
         BookDTO bookDTO = bookService.getBookDTO(id);
+        if (bookDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(bookDTO);
     }
 }

@@ -19,7 +19,9 @@ public class BookService {
 
     public BookDTO getBookDTO(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
-
+        if (book == null) {
+            return null;
+        }
         return new BookDTO(
                 book.getId(),
                 book.getTitle(),
