@@ -29,7 +29,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 255)
+    @Column(name = "title", length = 255, nullable = false)
     private String title;
 
     @Column(name = "genre", length = 100)
